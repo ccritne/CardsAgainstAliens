@@ -1,0 +1,6 @@
+#ifndef TYPEENTITY_HPP
+#define TYPEENTITY_HPP
+
+enum TypeEntity { HUMAN, ALIEN, ANIMAL, UNKNOWN };
+
+#endif //TYPEENTITY_HPP

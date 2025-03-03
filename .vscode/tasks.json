@@ -1,0 +1,65 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Build Directory",
+            "type": "shell",
+            "command": "mkdir",
+            "args": ["-p", "build"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Libraries",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c", 
+                "for file in include/*.cpp; do g++ -c $file -o build/$(basename $file .cpp).o -std=c++17 -I include/headers -I lib/SFML/include; done"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "dependsOn": ["Create Build Directory"]
+        },
+        {
+            "label": "Build SFML Project",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-c", "src/main.cpp", "-o", "build/main.o",
+                "-std=c++17",
+                "-I", "include/headers",
+                "-I", "lib/SFML/include",
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "dependsOn": ["Build Libraries"] 
+        },
+        {
+            "label": "Link SFML Project",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "build/*.o",
+                "-o", "aliens",
+                "-std=c++17",
+                "-L", "lib/SFML/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system",
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "dependsOn": ["Build SFML Project"] 
+        },        
+        {
+            "label": "Build Full Project",
+            "dependsOn": [
+                "Link SFML Project"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
